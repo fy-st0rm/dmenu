@@ -1,0 +1,37 @@
+--- dmenu.c
++++ dmenu.c
+@@ -602,7 +593,7 @@ setup(void)
+ #endif
+ 	/* init appearance */
+ 	for (j = 0; j < SchemeLast; j++)
+-		scheme[j] = drw_scm_create(drw, colors[j], alphas[i], 2);
++		scheme[j] = drw_scm_create(drw, colors[j], 2);
+ 
+ 	clip = XInternAtom(dpy, "CLIPBOARD",   False);
+ 	utf8 = XInternAtom(dpy, "UTF8_STRING", False);
+@@ -640,7 +631,6 @@ setup(void)
+ 		x = info[i].x_org;
+ 		y = info[i].y_org + (topbar ? 0 : info[i].height - mh);
+ 		mw = info[i].width;
+-
+ 		XFree(info);
+ 	} else
+ #endif
+@@ -658,13 +648,11 @@ setup(void)
+ 
+ 	/* create menu window */
+ 	swa.override_redirect = True;
+-	swa.background_pixel = 0;
+-	swa.border_pixel = 0;
+-	swa.colormap = cmap;
++	swa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
+ 	swa.event_mask = ExposureMask | KeyPressMask | VisibilityChangeMask;
+-	win = XCreateWindow(dpy, parentwin, x, y, mw, mh, border_width,
+-	                    depth, CopyFromParent, visual,
+-	                    CWOverrideRedirect | CWBackPixel | CWBorderPixel | CWColormap | CWEventMask, &swa);
++	win = XCreateWindow(dpy, parentwin, x, y, mw, mh, 0,
++	                    CopyFromParent, CopyFromParent, CopyFromParent,
++	                    CWOverrideRedirect | CWBackPixel | CWEventMask, &swa);
+ 	XSetClassHint(dpy, win, &ch);
+ 
+ 
